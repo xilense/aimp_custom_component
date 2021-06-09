@@ -2,9 +2,9 @@
 Custom component for Home Assistant to controling AIMP through network
 
 # screenshot
-![screenshot](https://raw.githubusercontent.com/xilense/aimp_custom_component/master/res/screenshot01.png)
-![screenshot](https://raw.githubusercontent.com/xilense/aimp_custom_component/master/res/screenshot02.png)
-![screenshot](https://raw.githubusercontent.com/xilense/aimp_custom_component/master/res/screenshot03.png)
+![screenshot](https://github.com/xilense/aimp_custom_component/raw/master/res/Screenshot01.png)
+![screenshot](https://github.com/xilense/aimp_custom_component/raw/master/res/Screenshot02.png)
+![screenshot](https://github.com/xilense/aimp_custom_component/raw/master/res/Screenshot03.png)
 
 # dependencies
 
