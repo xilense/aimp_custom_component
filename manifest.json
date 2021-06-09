@@ -1,10 +1,10 @@
 {
   "domain": "aimp",
   "name": "AIMP Media Player",
-  "documentation": "https://www.home-assistant.io/",
+  "documentation": "https://github.com/xilense/aimp_custom_component",
   "requirements": [],
   "dependencies": [],
   "codeowners": ["@xilense"],
   "iot_class": "local_polling",
-  "version": "1.2.0"
+  "version": "1.2.1"
 }
