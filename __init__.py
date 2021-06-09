@@ -1,0 +1,1 @@
+"""The aimp component."""
