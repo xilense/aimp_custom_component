@@ -388,11 +388,10 @@ class AIMP(MediaPlayerEntity):
         resp = self.send_aimp_msg(
             "GetPlaylistEntries", {"playlist_id":int(playlistid),"fields":["album","artist","bitrate","genre","duration","filesize","date","id","rating"]}
         )
-        
-        x = re.findall(r"\[\[(.+?)\]\,", str(resp))
-        str1 = ''.join(x)
-        tuple1 = tuple(map(str, str1.split(', ')))
-        trackid = tuple1[7]
+ 
+        x = resp.get("entries")
+        y = list(x[0])
+        trackid = y[7]
         
         resp2 = self.send_aimp_msg(
             "Play", {"playlist_id": int(playlistid), "track_id": int(trackid)}
