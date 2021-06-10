@@ -89,7 +89,6 @@ class AIMP(MediaPlayerEntity):
         self._playinfo = {}
         self._playlists = []
         self._playlists_db = dict()
-        # self._playlists_1st_track = dict()
         self._currentplaylist = None
 
         self._state = {}
@@ -266,8 +265,6 @@ class AIMP(MediaPlayerEntity):
     @property
     def media_position(self):
         """Time in seconds of current seek position."""
-        # return self._media_position_dict.get("value", None)
-        
         time = self._media_position_dict.get("value")
         if time is None:
             return None
@@ -344,9 +341,7 @@ class AIMP(MediaPlayerEntity):
 
     def set_volume_level(self, volume):
         """Send volume_up command to media player."""
-        self.send_aimp_msg(
-            "Status", {"status_id": 1, "value": int(volume * 100)}
-        )
+        self.send_aimp_msg("Status", {"status_id": 1, "value": int(volume * 100)})
 
     def mute_volume(self, mute):
         """Send mute command to media player."""
@@ -360,17 +355,7 @@ class AIMP(MediaPlayerEntity):
         
     def media_seek(self, position):
         """Send seek command."""
-        # resp = self.send_aimp_msg("Status", {"status_id": 31, "value": position })
-        # if resp is False:
-        #     return
-        # self._media_position_dict = resp.copy()
-        
         self.send_aimp_msg("Status", {"status_id": 31, "value": int(position) })
-
-        _LOGGER.debug(
-            "Success! position: %s",
-            position,
-        )
 
     def select_source(self, source):
         """Choose a different available playlist and play it."""
@@ -384,7 +369,6 @@ class AIMP(MediaPlayerEntity):
             return "key doesn't exist"
          
         playlistid = get_key(source)
-        
         resp = self.send_aimp_msg(
             "GetPlaylistEntries", {"playlist_id":int(playlistid),"fields":["album","artist","bitrate","genre","duration","filesize","date","id","rating"]}
         )
