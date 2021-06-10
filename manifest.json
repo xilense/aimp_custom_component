@@ -2,9 +2,11 @@
   "domain": "aimp",
   "name": "AIMP Media Player",
   "documentation": "https://github.com/xilense/aimp_custom_component",
+  "issue_tracker": "https://github.com/xilense/aimp_custom_component/issues",
   "requirements": [],
   "dependencies": [],
   "codeowners": ["@xilense"],
   "iot_class": "local_polling",
-  "version": "1.2.1"
+  "quality_scale": "silver",
+  "version": "1.2.2"
 }
