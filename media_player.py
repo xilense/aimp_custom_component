@@ -158,7 +158,7 @@ class AIMP(MediaPlayerEntity):
             except requests.exceptions.RequestException:
                 if self._available:
                     _LOGGER.error(
-                        "Connect error to AIMP at: %s", method, self._url
+                        "Connect error to AIMP at: %s", self._url
                     )
                     self._available = False
                 self._aimp = None
@@ -166,12 +166,6 @@ class AIMP(MediaPlayerEntity):
 
             self._state = STATE_IDLE
             self._available = True
-
-        aimstate = self._state_dict.get("value", None)
-        _LOGGER.debug(
-            "Command Success! aimstate: %s",
-            aimstate,
-        )
 
     def update_playinfo(self):
         resp = self.send_aimp_msg(
@@ -232,7 +226,6 @@ class AIMP(MediaPlayerEntity):
             return STATE_PAUSED
         if playback_state == 1:
             return STATE_PLAYING
-
         return STATE_IDLE
 
     @property
@@ -273,7 +266,6 @@ class AIMP(MediaPlayerEntity):
         time = self._media_position_dict.get("value")
         if time is None:
             return None
-
         return int(time)
 
     @property
@@ -285,8 +277,6 @@ class AIMP(MediaPlayerEntity):
     @property
     def media_duration(self):
         """Time in seconds of current song duration."""
-        # return self._playinfo.get("duration", None) // 1000
-
         time = self._playinfo.get("duration")
         if time is None:
             return None
@@ -376,7 +366,6 @@ class AIMP(MediaPlayerEntity):
             for key, value in self._playlists_db.items():
                  if val == value:
                      return key
-         
             return "key doesn't exist"
          
         playlistid = get_key(source)

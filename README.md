@@ -24,5 +24,4 @@ _Make sure add firewall exception to AIMP, so Home Assistant can send request & 
 ```
 
 # to-do
-* Add seek_media bar progress
 * Add browse_media
