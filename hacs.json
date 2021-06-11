@@ -1,0 +1,7 @@
+{
+  "name": "AIMP Media Player",
+  "content_in_root": true,
+  "domains": "media_player",
+  "iot_class": "Local Polling",
+  "render_readme": true
+}
