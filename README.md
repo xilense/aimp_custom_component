@@ -13,7 +13,7 @@ install needed component
 * [Control Plugin Code](https://github.com/a0ivanov/aimp-control-plugin)
 * [Alternative Web Interface](https://github.com/gilleswaeber/aimp-web) for Control Plugin
 
-_Make sure add firewall exception to AIMP, so Home Assistant can send request & get response through network_
+_make sure add firewall exception to AIMP, so Home Assistant can send request & get response through network_
 
 # yaml config 
 ```
@@ -25,3 +25,6 @@ _Make sure add firewall exception to AIMP, so Home Assistant can send request & 
 
 # to-do
 * Add browse_media
+
+
+<a href="https://www.buymeacoffee.com/xilense" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
