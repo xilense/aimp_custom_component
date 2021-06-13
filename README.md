@@ -17,6 +17,7 @@ _make sure add firewall exception to AIMP, so Home Assistant can send request & 
 
 # yaml config 
 ```
+media_player:
 - platform: aimp
   name: 'AIMP'
   host: !secret aimp_ip
