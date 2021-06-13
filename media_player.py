@@ -367,16 +367,22 @@ class AIMP(MediaPlayerEntity):
                  if val == value:
                      return key
             return "key doesn't exist"
-         
-        playlistid = get_key(source)
-        resp = self.send_aimp_msg(
-            "GetPlaylistEntries", {"playlist_id":int(playlistid),"fields":["album","artist","bitrate","genre","duration","filesize","date","id","rating"]}
-        )
- 
-        x = resp.get("entries")
-        y = list(x[0])
-        trackid = y[7]
-        
+        try: 
+            playlistid = get_key(source)
+            resp = self.send_aimp_msg(
+                "GetPlaylistEntries", {"playlist_id":int(playlistid),"fields":["album","artist","bitrate","genre","duration","filesize","date","id","rating"]}
+            )
+     
+            entries = resp.get("entries")
+            trackinfo = list(entries[0])
+            trackid = trackinfo[7]
+
+        except AttributeError:
+            _LOGGER.error("Received invalid response: entries: %s, trackinfo: %s, trackid: %s", 
+            entries, trackinfo, trackid,
+            )
+            return False
+
         resp2 = self.send_aimp_msg(
             "Play", {"playlist_id": int(playlistid), "track_id": int(trackid)}
         )
