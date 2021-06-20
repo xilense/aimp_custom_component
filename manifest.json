@@ -8,5 +8,5 @@
   "codeowners": ["@xilense"],
   "iot_class": "local_polling",
   "quality_scale": "silver",
-  "version": "1.3.0"
+  "version": "1.3.1"
 }

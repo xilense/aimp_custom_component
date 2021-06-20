@@ -340,6 +340,10 @@ class AIMP(MediaPlayerEntity):
         """Send media_pause command to media player."""
         self.send_aimp_msg("Pause", "{}")
 
+    def media_stop(self):
+        """Send media_pause command to media player."""
+        self.send_aimp_msg("Stop", "{}")
+
     def set_volume_level(self, volume):
         """Send volume_up command to media player."""
         self.send_aimp_msg("Status", {"status_id": 1, "value": int(volume * 100)})
@@ -367,19 +371,32 @@ class AIMP(MediaPlayerEntity):
                  if val == value:
                      return key
             return "key doesn't exist"
-        try: 
-            playlistid = get_key(source)
-            resp = self.send_aimp_msg(
-                "GetPlaylistEntries", {"playlist_id":int(playlistid),"fields":["album","artist","bitrate","genre","duration","filesize","date","id","rating"]}
-            )
-     
-            entries = resp.get("entries")
-            trackinfo = list(entries[0])
-            trackid = trackinfo[7]
 
-        except AttributeError:
-            _LOGGER.error("Received invalid response: entries: %s, trackinfo: %s, trackid: %s", 
-            entries, trackinfo, trackid,
+        playlistid = get_key(source)
+        resp = self.send_aimp_msg(
+            "GetPlaylistEntries", {"playlist_id":int(playlistid),"fields":["album","artist","bitrate","genre","duration","filesize","date","id","rating"]}
+        )
+        try: 
+            entries = resp.get("entries")
+        except:
+            _LOGGER.error("Received invalid response: resp: %s", 
+            resp,
+            )
+            return False
+            
+        try:
+            trackinfo = list(entries[0])
+        except:
+            _LOGGER.error("Received invalid response: : entries: %s", 
+            entries,
+            )
+            return False
+            
+        try:
+            trackid = trackinfo[7]
+        except:
+            _LOGGER.error("Received invalid response: trackinfo: %s", 
+            trackinfo,
             )
             return False
 
@@ -392,7 +409,7 @@ class AIMP(MediaPlayerEntity):
     def clear_playlist(self):
         """Clear players playlist."""
         self._currentplaylist = None
-        self.send_aimp_msg("commands", {})
+        self.send_aimp_msg("Stop", "{}")
 
     @Throttle(PLAYLIST_UPDATE_INTERVAL)
     def update_playlists(self, **kwargs):
