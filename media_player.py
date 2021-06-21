@@ -108,8 +108,11 @@ class AIMP(MediaPlayerEntity):
             payload = {"version": "1.1", "method": method, "id": 1, "params": params}
             response = requests.post(url, json=payload, timeout=3)
             if response.status_code == 200:
-                data = response.json()
-                result = data["result"]
+                try:
+                    data = response.json()
+                    result = data["result"]
+                except:
+                    result = None
             else:
                 _LOGGER.error(
                     "Query failed, response code: %s Full message: %s",
@@ -117,14 +120,6 @@ class AIMP(MediaPlayerEntity):
                     response,
                 )
                 return False
-
-            # _LOGGER.debug(
-            #     "Command Success! Result: %s Payload: %s",
-            #     result,
-            #     payload,
-            # )
-
-        #######################################################################
 
         except requests.exceptions.RequestException:
             _LOGGER.error(
@@ -168,20 +163,19 @@ class AIMP(MediaPlayerEntity):
             self._available = True
 
     def update_playinfo(self):
-        resp = self.send_aimp_msg(
-            "GetPlaylistEntryInfo", {"playlist_id": -1, "track_id": -1}
-        )
+        resp = self.send_aimp_msg("GetPlaylistEntryInfo", {"playlist_id": -1, "track_id": -1})
         if resp is False:
             return
         self._playinfo = resp.copy()
 
     def update_coverurl(self):
-        resp = self.send_aimp_msg(
-            "GetCover", {"playlist_id": -1, "track_id": -1, "cover_width": 512, "cover_height": 512}
-        )
+        resp = self.send_aimp_msg("GetCover", {"playlist_id": -1, "track_id": -1, "cover_width": 512, "cover_height": 512})
         if resp is False:
             return
-        self._coverurl = resp.copy()
+        elif resp is None:
+            self._coverurl = {}
+        else:
+            self._coverurl = resp.copy()
 
     def update_state(self):
         resp = self.send_aimp_msg("Status", {"status_id":4})
@@ -253,7 +247,7 @@ class AIMP(MediaPlayerEntity):
         """Image url of current playing media."""
         url = self._coverurl.get("album_cover_uri", None)
         if url is None:
-            return
+            return None
         if str(url[0:2]).lower() == "ht":
             mediaurl = url
         else:
@@ -373,36 +367,26 @@ class AIMP(MediaPlayerEntity):
             return "key doesn't exist"
 
         playlistid = get_key(source)
-        resp = self.send_aimp_msg(
-            "GetPlaylistEntries", {"playlist_id":int(playlistid),"fields":["album","artist","bitrate","genre","duration","filesize","date","id","rating"]}
-        )
+        resp = self.send_aimp_msg("GetPlaylistEntries", {"playlist_id":int(playlistid),"fields":["album","artist","bitrate","genre","duration","filesize","date","id","rating"]})
         try: 
             entries = resp.get("entries")
         except:
-            _LOGGER.error("Received invalid response: resp: %s", 
-            resp,
-            )
+            _LOGGER.error("Received invalid response: resp: %s", resp,)
             return False
             
         try:
             trackinfo = list(entries[0])
         except:
-            _LOGGER.error("Received invalid response: : entries: %s", 
-            entries,
-            )
+            _LOGGER.error("Received invalid response: : entries: %s", entries,)
             return False
             
         try:
             trackid = trackinfo[7]
         except:
-            _LOGGER.error("Received invalid response: trackinfo: %s", 
-            trackinfo,
-            )
+            _LOGGER.error("Received invalid response: trackinfo: %s", trackinfo,)
             return False
 
-        resp2 = self.send_aimp_msg(
-            "Play", {"playlist_id": int(playlistid), "track_id": int(trackid)}
-        )
+        resp2 = self.send_aimp_msg("Play", {"playlist_id": int(playlistid), "track_id": int(trackid)})
         if resp2 is False:
             return
         
